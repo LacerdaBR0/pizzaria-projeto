@@ -50,4 +50,4 @@ npm run dev
 ```
 
 ## Autor
-Projeto individual — [seu nome].
+Guilherme Silva de Lacerda.
