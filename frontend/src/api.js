@@ -25,5 +25,24 @@ export const api = {
     }).then(handle),
   removerProduto: (id) =>
     fetch(`${BASE_URL}/produtos/${id}`, { method: "DELETE" }).then(handle),
-  listarCategorias: () => fetch(`${BASE_URL}/categorias`).then(handle)
+  listarCategorias: () => fetch(`${BASE_URL}/categorias`).then(handle),
+
+  listarTamanhos: () => fetch(`${BASE_URL}/tamanhos`).then(handle),
+  obterCarrinho: () => fetch(`${BASE_URL}/carrinho`).then(handle),
+  adicionarItemCarrinho: (dados) =>
+    fetch(`${BASE_URL}/carrinho/itens`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    }).then(handle),
+  atualizarQuantidade: (id, quantidade) =>
+    fetch(`${BASE_URL}/carrinho/itens/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ quantidade })
+    }).then(handle),
+  removerItemCarrinho: (id) =>
+    fetch(`${BASE_URL}/carrinho/itens/${id}`, { method: "DELETE" }).then(handle),
+  esvaziarCarrinho: () =>
+    fetch(`${BASE_URL}/carrinho`, { method: "DELETE" }).then(handle)
 };

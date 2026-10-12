@@ -68,27 +68,30 @@ body {
   letter-spacing: 0.12em;
 }
 
-.resumo {
+.abas {
   display: flex;
-  gap: 26px;
+  gap: 8px;
 }
 
-.resumo div {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.resumo strong {
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-size: 24px;
-}
-
-.resumo span {
-  font-size: 12px;
+.aba {
+  border: none;
+  background: transparent;
   color: #cdbfae;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.aba:hover {
+  color: var(--paper);
+}
+
+.aba.ativa {
+  background: var(--tomate);
+  color: #fff;
 }
 
 .alerta {
@@ -103,7 +106,7 @@ body {
 
 .conteudo {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1fr 360px;
   gap: 22px;
   margin-top: 22px;
   align-items: start;
@@ -195,6 +198,10 @@ body {
   border-color: var(--ambar);
 }
 
+.btn-mini-perigo {
+  margin-left: 0;
+}
+
 .btn-mini-perigo:hover {
   border-color: var(--tomate);
   color: var(--tomate);
@@ -202,8 +209,6 @@ body {
 
 .painel {
   padding: 20px;
-  position: sticky;
-  top: 20px;
 }
 
 .painel h2 {
@@ -256,6 +261,50 @@ body {
   height: 16px;
 }
 
+.dica {
+  color: var(--cinza);
+  font-size: 12px;
+}
+
+.adicionais {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.adicional {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.adicional input {
+  width: 16px;
+  height: 16px;
+}
+
+.preco-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--paper);
+  border: 1px dashed var(--ambar);
+  border-radius: 12px;
+  margin: 6px 0 14px;
+}
+
+.preco-preview span {
+  color: var(--cinza);
+  font-size: 13px;
+}
+
+.preco-preview strong {
+  font-family: "Space Mono", monospace;
+  font-size: 20px;
+}
+
 .acoes {
   display: flex;
   gap: 10px;
@@ -300,11 +349,133 @@ body {
   margin: 0 0 6px;
 }
 
+.coluna-carrinho .painel {
+  position: sticky;
+  top: 20px;
+}
+
+.carrinho-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.carrinho-topo h2 {
+  margin: 0;
+}
+
+.vazio-carrinho {
+  text-align: center;
+  color: var(--cinza);
+  padding: 28px 10px;
+}
+
+.vazio-carrinho p {
+  font-family: "Bricolage Grotesque", sans-serif;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.carrinho-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.carrinho-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--linha);
+}
+
+.carrinho-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.carrinho-item-info strong {
+  font-size: 14px;
+}
+
+.carrinho-preco {
+  font-size: 12px;
+  color: var(--cinza);
+}
+
+.carrinho-item-controles {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qtd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qtd button {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--linha);
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.qtd button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.carrinho-subtotal {
+  font-family: "Space Mono", monospace;
+  margin-left: auto;
+}
+
+.btn-remover {
+  border: none;
+  background: transparent;
+  color: var(--cinza);
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.btn-remover:hover {
+  color: var(--tomate);
+}
+
+.carrinho-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 2px solid var(--espresso);
+}
+
+.carrinho-total span {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.carrinho-total strong {
+  font-family: "Space Mono", monospace;
+  font-size: 22px;
+  color: var(--tomate-escuro);
+}
+
 @media (max-width: 820px) {
   .conteudo {
     grid-template-columns: 1fr;
   }
-  .painel {
+  .coluna-carrinho .painel {
     position: static;
   }
 }
