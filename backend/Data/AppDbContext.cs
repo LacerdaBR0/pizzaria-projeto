@@ -15,6 +15,9 @@ public class AppDbContext : DbContext
     public DbSet<Carrinho> Carrinhos => Set<Carrinho>();
     public DbSet<CarrinhoItem> CarrinhoItens => Set<CarrinhoItem>();
     public DbSet<CarrinhoItemAdicional> CarrinhoItemAdicionais => Set<CarrinhoItemAdicional>();
+    public DbSet<Usuario> Usuarios => Set<Usuario>();
+    public DbSet<Pedido> Pedidos => Set<Pedido>();
+    public DbSet<PedidoItem> PedidoItens => Set<PedidoItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -93,6 +96,41 @@ public class AppDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(a => a.ProdutoId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Usuario>(e =>
+        {
+            e.ToTable("Usuario");
+            e.Property(u => u.Nome).HasMaxLength(120).IsRequired();
+            e.Property(u => u.Email).HasMaxLength(160).IsRequired();
+            e.Property(u => u.SenhaHash).HasMaxLength(256).IsRequired();
+            e.HasIndex(u => u.Email).IsUnique();
+        });
+
+        modelBuilder.Entity<Pedido>(e =>
+        {
+            e.ToTable("Pedido");
+            e.Property(p => p.Endereco).HasMaxLength(300).IsRequired();
+            e.Property(p => p.FormaPagamento).HasMaxLength(30).IsRequired();
+            e.Property(p => p.Status).HasMaxLength(30).IsRequired();
+            e.Property(p => p.Total).HasColumnType("decimal(10,2)");
+
+            e.HasOne(p => p.Usuario)
+                .WithMany()
+                .HasForeignKey(p => p.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<PedidoItem>(e =>
+        {
+            e.ToTable("PedidoItem");
+            e.Property(i => i.Descricao).HasMaxLength(300).IsRequired();
+            e.Property(i => i.PrecoUnitario).HasColumnType("decimal(10,2)");
+
+            e.HasOne(i => i.Pedido)
+                .WithMany(p => p.Itens)
+                .HasForeignKey(i => i.PedidoId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Categoria>().HasData(

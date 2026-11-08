@@ -151,6 +151,74 @@ namespace Pizzaria.Api.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Pizzaria.Api.Models.Pedido", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Endereco")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("FormaPagamento")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Pedido", (string)null);
+                });
+
+            modelBuilder.Entity("Pizzaria.Api.Models.PedidoItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("PedidoId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PrecoUnitario")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PedidoId");
+
+                    b.ToTable("PedidoItem", (string)null);
+                });
+
             modelBuilder.Entity("Pizzaria.Api.Models.Produto", b =>
                 {
                     b.Property<int>("Id")
@@ -236,6 +304,40 @@ namespace Pizzaria.Api.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Pizzaria.Api.Models.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("nvarchar(160)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<string>("SenhaHash")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Usuario", (string)null);
+                });
+
             modelBuilder.Entity("Pizzaria.Api.Models.CarrinhoItem", b =>
                 {
                     b.HasOne("Pizzaria.Api.Models.Produto", "Borda")
@@ -296,6 +398,28 @@ namespace Pizzaria.Api.Migrations
                     b.Navigation("Produto");
                 });
 
+            modelBuilder.Entity("Pizzaria.Api.Models.Pedido", b =>
+                {
+                    b.HasOne("Pizzaria.Api.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Pizzaria.Api.Models.PedidoItem", b =>
+                {
+                    b.HasOne("Pizzaria.Api.Models.Pedido", "Pedido")
+                        .WithMany("Itens")
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pedido");
+                });
+
             modelBuilder.Entity("Pizzaria.Api.Models.Produto", b =>
                 {
                     b.HasOne("Pizzaria.Api.Models.Categoria", "Categoria")
@@ -320,6 +444,11 @@ namespace Pizzaria.Api.Migrations
             modelBuilder.Entity("Pizzaria.Api.Models.Categoria", b =>
                 {
                     b.Navigation("Produtos");
+                });
+
+            modelBuilder.Entity("Pizzaria.Api.Models.Pedido", b =>
+                {
+                    b.Navigation("Itens");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,7 +3,7 @@ import { api } from "../api.js";
 import MontarPizza from "./MontarPizza.jsx";
 import Carrinho from "./Carrinho.jsx";
 
-export default function MontarPizzaPage() {
+export default function MontarPizzaPage({ usuario, onIrParaLogin }) {
   const [tamanhos, setTamanhos] = useState([]);
   const [produtos, setProdutos] = useState([]);
   const [carrinho, setCarrinho] = useState(null);
@@ -73,6 +73,17 @@ export default function MontarPizzaPage() {
     }
   }
 
+  async function finalizar({ endereco, formaPagamento }) {
+    const pedido = await api.finalizarPedido({
+      usuarioId: usuario.id,
+      endereco,
+      formaPagamento
+    });
+    const atualizado = await api.obterCarrinho();
+    setCarrinho(atualizado);
+    return pedido;
+  }
+
   if (carregando) {
     return (
       <div className="vazio">
@@ -102,9 +113,12 @@ export default function MontarPizzaPage() {
         <aside className="coluna-carrinho">
           <Carrinho
             carrinho={carrinho}
+            usuario={usuario}
             onAlterarQuantidade={alterarQuantidade}
             onRemover={remover}
             onEsvaziar={esvaziar}
+            onFinalizar={finalizar}
+            onIrParaLogin={onIrParaLogin}
           />
         </aside>
       </div>

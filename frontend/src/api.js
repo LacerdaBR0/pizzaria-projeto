@@ -44,5 +44,26 @@ export const api = {
   removerItemCarrinho: (id) =>
     fetch(`${BASE_URL}/carrinho/itens/${id}`, { method: "DELETE" }).then(handle),
   esvaziarCarrinho: () =>
-    fetch(`${BASE_URL}/carrinho`, { method: "DELETE" }).then(handle)
+    fetch(`${BASE_URL}/carrinho`, { method: "DELETE" }).then(handle),
+
+  registrar: (dados) =>
+    fetch(`${BASE_URL}/auth/registrar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    }).then(handle),
+  login: (dados) =>
+    fetch(`${BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    }).then(handle),
+  finalizarPedido: (dados) =>
+    fetch(`${BASE_URL}/pedidos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    }).then(handle),
+  listarPedidos: (usuarioId) =>
+    fetch(`${BASE_URL}/pedidos?usuarioId=${usuarioId}`).then(handle)
 };
