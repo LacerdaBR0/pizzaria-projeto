@@ -12,17 +12,26 @@ public class PedidosController : ControllerBase
 {
     private readonly AppDbContext _db;
 
+    private static readonly string[] StatusValidos =
+    {
+        "Recebido", "Em preparo", "Saiu pra entrega", "Entregue"
+    };
+
     public PedidosController(AppDbContext db)
     {
         _db = db;
     }
 
-    private static PedidoDto MontarDto(Pedido p)
+    private static List<PedidoItemDto> MontarItens(Pedido p)
     {
-        var itens = p.Itens
+        return p.Itens
             .Select(i => new PedidoItemDto(i.Descricao, i.Quantidade, i.PrecoUnitario, i.PrecoUnitario * i.Quantidade))
             .ToList();
-        return new PedidoDto(p.Id, p.CriadoEm, p.Status, p.Endereco, p.FormaPagamento, p.Total, itens);
+    }
+
+    private static PedidoDto MontarDto(Pedido p)
+    {
+        return new PedidoDto(p.Id, p.CriadoEm, p.Status, p.Endereco, p.FormaPagamento, p.Total, MontarItens(p));
     }
 
     [HttpPost]
@@ -80,5 +89,54 @@ public class PedidosController : ControllerBase
             .ToListAsync();
 
         return Ok(pedidos.Select(MontarDto).ToList());
+    }
+
+    [HttpGet("todos")]
+    public async Task<ActionResult<IEnumerable<PedidoAdminDto>>> Todos()
+    {
+        var pedidos = await _db.Pedidos
+            .Include(p => p.Itens)
+            .Include(p => p.Usuario)
+            .OrderByDescending(p => p.CriadoEm)
+            .ToListAsync();
+
+        var dtos = pedidos.Select(p => new PedidoAdminDto(
+            p.Id,
+            p.CriadoEm,
+            p.Usuario!.Nome,
+            p.Status,
+            p.Endereco,
+            p.FormaPagamento,
+            p.Total,
+            MontarItens(p))).ToList();
+
+        return Ok(dtos);
+    }
+
+    [HttpPut("{id:int}/status")]
+    public async Task<ActionResult<PedidoAdminDto>> AtualizarStatus(int id, AtualizarStatusDto dto)
+    {
+        if (!StatusValidos.Contains(dto.Status))
+            return BadRequest("Status inválido.");
+
+        var pedido = await _db.Pedidos
+            .Include(p => p.Itens)
+            .Include(p => p.Usuario)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (pedido is null) return NotFound();
+
+        pedido.Status = dto.Status;
+        await _db.SaveChangesAsync();
+
+        return Ok(new PedidoAdminDto(
+            pedido.Id,
+            pedido.CriadoEm,
+            pedido.Usuario!.Nome,
+            pedido.Status,
+            pedido.Endereco,
+            pedido.FormaPagamento,
+            pedido.Total,
+            MontarItens(pedido)));
     }
 }

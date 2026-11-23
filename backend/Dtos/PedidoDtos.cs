@@ -13,3 +13,16 @@ public record PedidoDto(
     decimal Total,
     List<PedidoItemDto> Itens
 );
+
+public record AtualizarStatusDto(string Status);
+
+public record PedidoAdminDto(
+    int Id,
+    DateTime CriadoEm,
+    string Cliente,
+    string Status,
+    string Endereco,
+    string FormaPagamento,
+    decimal Total,
+    List<PedidoItemDto> Itens
+);

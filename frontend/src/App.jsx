@@ -3,6 +3,7 @@ import CardapioPage from "./components/CardapioPage.jsx";
 import MontarPizzaPage from "./components/MontarPizzaPage.jsx";
 import PedidosPage from "./components/PedidosPage.jsx";
 import LoginPage from "./components/LoginPage.jsx";
+import PainelPage from "./components/PainelPage.jsx";
 
 export default function App() {
   const [aba, setAba] = useState("montar");
@@ -58,6 +59,9 @@ export default function App() {
           <button className={aba === "cardapio" ? "aba ativa" : "aba"} onClick={() => setAba("cardapio")}>
             Cardápio
           </button>
+          <button className={aba === "painel" ? "aba ativa" : "aba"} onClick={() => setAba("painel")}>
+            Pizzaria
+          </button>
         </nav>
 
         <div className="usuario-area">
@@ -77,6 +81,7 @@ export default function App() {
         {aba === "montar" && <MontarPizzaPage usuario={usuario} onIrParaLogin={() => setAba("login")} />}
         {aba === "pedidos" && <PedidosPage usuario={usuario} onIrParaLogin={() => setAba("login")} />}
         {aba === "cardapio" && <CardapioPage />}
+        {aba === "painel" && <PainelPage />}
       </main>
     </div>
   );

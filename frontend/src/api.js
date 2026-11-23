@@ -65,5 +65,14 @@ export const api = {
       body: JSON.stringify(dados)
     }).then(handle),
   listarPedidos: (usuarioId) =>
-    fetch(`${BASE_URL}/pedidos?usuarioId=${usuarioId}`).then(handle)
+    fetch(`${BASE_URL}/pedidos?usuarioId=${usuarioId}`).then(handle),
+
+  listarTodosPedidos: () => fetch(`${BASE_URL}/pedidos/todos`).then(handle),
+  atualizarStatusPedido: (id, status) =>
+    fetch(`${BASE_URL}/pedidos/${id}/status`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status })
+    }).then(handle),
+  obterRelatorio: () => fetch(`${BASE_URL}/relatorio/vendas`).then(handle)
 };
